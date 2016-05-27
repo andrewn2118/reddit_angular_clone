@@ -1,0 +1,83 @@
+.row {
+  margin-bottom: 20px;
+}
+
+.col-md-10 {
+  border: 2px solid rgb(240, 240, 240);
+  border-radius: 5px;
+  padding: 10px 0;
+}
+
+.posts-images {
+  width: 100%;
+}
+
+.posts-title {
+  font-size: 20px;
+}
+
+.posts-author {
+  text-align: right;
+  margin: 5px 0 10px;
+}
+
+.posts-text {
+  max-height: 138px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.posts-info {
+  margin-top: 10px;
+}
+
+span {
+  cursor: pointer;
+}
+
+.positive {
+  color: forestgreen;
+}
+
+.negative {
+  color: firebrick;
+}
+
+.no-pointer {
+  cursor: auto;
+}
+
+.posts-comments, .posts-newComment {
+  margin-top: 10px;
+}
+
+.posts-new {
+  padding: 10px;
+  border: none;
+}
+
+.inputError {
+  background-color: #ffe5e5;
+}
+
+.error {
+  color: red;
+}
+
+.ng-enter {
+  transition:0.5s linear all;
+  opacity:0;
+}
+
+.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+.ng-leave {
+  transition:0.5s linear all;
+  opacity:1;
+}
+
+.ng-leave.ng-leave-active {
+  opacity:0;
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="RedditClone">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular Reddit</title>
+
+  <script src="http://code.jquery.com/jquery-2.2.1.min.js"></script>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+  <!-- Moment JS -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+
+  <!-- Angular -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script>
+  <!-- Angular Animate -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
+
+  <script type="text/javascript" src="main.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div ng-controller="NewPost">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <span class="navbar-brand">Reddit Clone</span>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a ng-click="showNewPostForm()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Submit Post</a></li>
+          </ul>
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search" ng-model="vm.searchPosts">
+            </div>
+          </form>
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sort By {{vm.orderType}} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a ng-click="changeOrder('votes')">Votes</a></li>
+                <li><a ng-click="changeOrder('date')">Date</a></li>
+                <li><a ng-click="changeOrder('title')">Title</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row" ng-show="vm.showAddPost">
+        <div class="col-md-10 col-md-offset-1 posts-new">
+          <form name="NewPostForm" ng-submit="addPost()" novalidate>
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input type="text" name="title" class="form-control" placeholder="Title" ng-model="vm.newPost.title" ng-class="{inputError: NewPostForm.title.$invalid && vm.postSubmitted}" required>
+              <!-- <small class="error" ng-show="NewPostForm.title.$invalid && vm.postSubmitted">INVALID</small> -->
+            </div>
+            <div class="form-group">
+              <label for="author">Author</label>
+              <input type="text" name="author" class="form-control" placeholder="Author" ng-model="vm.newPost.author" ng-class="{inputError: NewPostForm.author.$invalid && vm.postSubmitted}" required>
+              <!-- <small class="error" ng-show="NewPostForm.author.$invalid && vm.postSubmitted">INVALID</small> -->
+            </div>
+            <div class="form-group">
+              <label for="img">Image URL</label>
+              <input type="text" name="img" class="form-control" placeholder="Image URL" ng-model="vm.newPost.img" ng-class="{inputError: NewPostForm.img.$invalid && vm.postSubmitted}" required>
+              <!-- <small class="error" ng-show="NewPostForm.img.$invalid && vm.postSubmitted">INVALID</small> -->
+            </div>
+            <div class="form-group">
+              <label for="desc">Description</label>
+              <input type="text" name="desc" class="form-control" placeholder="Description" ng-model="vm.newPost.desc" ng-class="{inputError: NewPostForm.desc.$invalid && vm.postSubmitted}" required>
+              <!-- <small class="error" ng-show="NewPostForm.desc.$invalid && vm.postSubmitted">INVALID</small> -->
+            </div>
+            <button type="submit" class="btn btn-default">Submit Post</button>
+          </form>
+        </div>
+      </div>
+      <div class="row" ng-repeat="post in vm.posts | orderBy : vm.orderType : vm.orderReverse | filter : vm.searchPosts">
+        <div class="col-md-10 col-md-offset-1">
+          <div class="col-md-3">
+            <img ng-src="{{post.img}}" alt="post image" class="posts-images">
+          </div>
+          <div class="col-md-9">
+            <div class="posts-title">
+              <strong>{{post.title}} |</strong>
+              <span class="glyphicon glyphicon-hand-left" aria-hidden="true" ng-click="post.addVote('+')"></span>
+              <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" ng-click="post.addVote('-')"></span>
+              <strong ng-class="{positive: post.votes > 0, negative: post.votes < 0}">{{post.votes}}</strong>
+            </div>
+            <div class="posts-author">By {{post.author}}</div>
+            <div class="posts-text">{{post.desc}}</div>
+            <div class="posts-info">
+              <span class="no-pointer glyphicon glyphicon-calendar" aria-hidden="true"></span> {{post.date}} &nbsp;|&nbsp;
+              <span ng-click="post.showCommentsList()">
+                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> 
+                {{post.comments.length}} 
+                <ng-pluralize count="post.comments.length" when="{'1': 'comment', 'other': 'comments'}"></ng-pluralize>
+              </span> &nbsp;|&nbsp;
+              <span ng-click="post.showNewCommentForm()"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Add Comment</span>
+            </div>
+            <div class="posts-newComment" ng-show="post.showAddComment">
+              <form name="NewCommentForm" ng-submit="post.addComment()" novalidate>
+                <label for="author">Author</label>
+                <input type="text" name="author" ng-model="post.newComment.author" required>
+                <label for="text">Text</label>
+                <input type="text" name="text" ng-model="post.newComment.text" required>
+                <button type="submit" class="btn btn-default">Add Comment</button>
+              </form>
+            </div>
+            <div class="posts-comments" ng-show="post.showComments">
+              <strong>Comments</strong>
+              <div ng-repeat="comment in post.comments">
+                <strong>{{comment.author}}</strong> - {{comment.text}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- row end -->
+    </div><!-- container end -->
+  </div><!-- NewPost controller end -->
+</body>
+</html>
