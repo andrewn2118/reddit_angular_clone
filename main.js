@@ -45,48 +45,48 @@ app.controller('NewPost', function($scope){
       $scope.vm.postSubmitted = true;
     }
   };
-
-  function Comment(author, text){
-    this.author = author;
-    this.text = text;
-  }
-
-  function Post(title, author, img, desc){
-    this.title = title;
-    this.author = author;
-    this.img = img;
-    this.desc = desc;
-    this.date = moment().calendar();
-    this.votes = 0;
-    this.comments = [];
-    this.newComment = {
-      author: '',
-      text: ''
-    };
-    this.showComments = false;
-    this.showAddComment = false;
-    this.commentSubmitted = false;
-  }
-
-  Post.prototype.addVote = function(op){
-    this.votes = eval(this.votes + op + 1);
-  };
-
-  Post.prototype.showCommentsList = function(){
-    this.showComments = !this.showComments;
-  };
-
-  Post.prototype.showNewCommentForm = function(){
-    this.showAddComment = !this.showAddComment;
-  }
-
-  Post.prototype.addComment = function(){
-    let comment = new Comment(this.newComment.author, this.newComment.text);
-    this.comments.push(comment);
-    this.showAddComment = false;
-    this.newComment = {
-      author: '',
-      text: ''
-    };
-  };
 });
+
+function Comment(author, text){
+  this.author = author;
+  this.text = text;
+}
+
+function Post(title, author, img, desc){
+  this.title = title;
+  this.author = author;
+  this.img = img;
+  this.desc = desc;
+  this.date = moment().calendar();
+  this.votes = 0;
+  this.comments = [];
+  this.newComment = {
+    author: '',
+    text: ''
+  };
+  this.showComments = false;
+  this.showAddComment = false;
+  this.commentSubmitted = false;
+}
+
+Post.prototype.addVote = function(op){
+  this.votes = eval(this.votes + op + 1);
+};
+
+Post.prototype.showCommentsList = function(){
+  this.showComments = !this.showComments;
+};
+
+Post.prototype.showNewCommentForm = function(){
+  this.showAddComment = !this.showAddComment;
+}
+
+Post.prototype.addComment = function(){
+  let comment = new Comment(this.newComment.author, this.newComment.text);
+  this.comments.push(comment);
+  this.showAddComment = false;
+  this.newComment = {
+    author: '',
+    text: ''
+  };
+};
